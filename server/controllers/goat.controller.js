@@ -42,4 +42,15 @@ const addGoats = async (req, res) => {
   }
 };
 
-module.exports = { addGoats };
+const findgoats = async (req, res) => {
+  try {
+    const goats = await Goat.find();
+
+    res.status(201).json(goats); // Respond with the saved goat object
+  } catch (error) {
+    console.error("Error finding  goat:", error);
+    res.status(500).json({ error: "Failed to find  goat" }); // Handle error
+  }
+};
+
+module.exports = { addGoats, findgoats };

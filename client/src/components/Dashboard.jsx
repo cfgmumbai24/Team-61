@@ -7,6 +7,7 @@ import Topbar from "./Topbar";
 import '../styles/dashboard.css'
 import PvTable from "./PvTable";
 import GoatForm from "./GoatForm";
+import BeneficiaryForm from "./BeneficiaryForm";
 
 const Dashboard = ({content}) => {
   const { currentUser, currentUserDetails } = useAuth();
@@ -37,6 +38,7 @@ const Dashboard = ({content}) => {
         <Topbar/>
         {content === 'pvtable' && (<PvTable/>)}
         {content === 'assigngoat' && (<GoatForm/>)}
+        {content === 'addben' && (<BeneficiaryForm/>)}
       </div>
       
       

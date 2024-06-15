@@ -9,6 +9,7 @@ import PvTable from "./PvTable";
 import GoatForm from "./GoatForm";
 import BeneficiaryForm from "./BeneficiaryForm";
 import PvInsight from "./PvInsight";
+import Admin from "./Admin";
 
 const Dashboard = ({content}) => {
   const { currentUser, currentUserDetails } = useAuth();
@@ -41,6 +42,7 @@ const Dashboard = ({content}) => {
         {content === 'assigngoat' && (<GoatForm/>)}
         {content === 'addben' && (<BeneficiaryForm/>)}
         {content === 'pvinsight' && (<PvInsight/>)}
+        {content === 'admin' && (<Admin/>)}
       </div>
       
       

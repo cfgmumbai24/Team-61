@@ -20,13 +20,6 @@ const PvTable = () => {
   const columns = [
     { field: "id", headerName: "ID" },
     {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      
-    },
-    {
         field: "name",
         headerName: "Name",
         flex: 1,

@@ -3,12 +3,10 @@ const Visit = require("../models/visits.model");
 const Baneficial = require("../models/benef.model");
 
 require("dotenv").config({ path: "../.env" });
-
 require("dotenv").config();
 
 // Controller to handle POST requests to create a new Paravat entry
 exports.visitadd = async (req, res) => {
-  //   Check if all required fields are provided
   const requiredFields = ["paravatId", "beneficiaryId", "status", "date"];
   const missingFields = requiredFields.filter((field) => !(field in req.body));
 
@@ -46,11 +44,11 @@ exports.visitget = async (req, res) => {
 };
 
 exports.updateVisitStatus = async (req, res) => {
-  const paravatId = req.body.paravatId; // Assuming visitId is passed as a route parameter
+  const paravatId = req.body.paravatId;
   const beneficiaryId = req.body.beneficiaryId;
   const date = req.body.date;
+
   try {
-    // Find the visit by visitId
     const visit = await Visit.findOneAndUpdate({
       paravatId: paravatId,
       beneficiaryId: beneficiaryId,
@@ -60,15 +58,12 @@ exports.updateVisitStatus = async (req, res) => {
     if (!visit) {
       return res.status(404).json({
         success: false,
-        message: `Visit with ID ${visitId} not found`,
+        message: `Visit with ID ${paravatId} not found`,
       });
     }
 
-    // Update the status field based on req.body
     visit.status = req.body.status;
     visit.comments = req.body.comments;
-    console.log("visit");
-    // Save the updated visit
     const updatedVisit = await visit.save();
 
     res.json({ success: true, data: updatedVisit });
@@ -77,10 +72,6 @@ exports.updateVisitStatus = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
-
-///   new one
-
 
 exports.getVisitsByParavatId = async (req, res) => {
   const paravatId = req.params.paravatId;
@@ -92,22 +83,29 @@ exports.getVisitsByParavatId = async (req, res) => {
 
   try {
     const visits = await Visit.aggregate([
-      { $match: { paravatId: String(paravatId), date: { $gte: startOfDay, $lt: endOfDay } } },
-      { $sort: { date: -1 } }
+      {
+        $match: {
+          paravatId: String(paravatId),
+          date: { $gte: startOfDay, $lt: endOfDay },
+        },
+      },
+      { $sort: { date: -1 } },
     ]);
 
-    const visitsWithBeneficiaries = await Promise.all(visits.map(async (visit) => {
-      if (visit.beneficiaryId.length === 24) {
-        const beneficiary = await Baneficial.findById(visit.beneficiaryId);
-        if (beneficiary) {
-          return {
-            ...visit,
-            beneficiary: beneficiary.toObject()
-          };
+    const visitsWithBeneficiaries = await Promise.all(
+      visits.map(async (visit) => {
+        if (visit.beneficiaryId.length === 24) {
+          const beneficiary = await Baneficial.findById(visit.beneficiaryId);
+          if (beneficiary) {
+            return {
+              ...visit,
+              beneficiary: beneficiary.toObject(),
+            };
+          }
         }
-      }
-      return visit;
-    }));
+        return visit;
+      })
+    );
 
     res.json({ success: true, data: visitsWithBeneficiaries });
   } catch (error) {
@@ -115,4 +113,48 @@ exports.getVisitsByParavatId = async (req, res) => {
   }
 };
 
+// New update controller
+exports.updateVisit = async (req, res) => {
+  const { paravatId, beneficiaryId, date } = req.body;
 
+  if (!paravatId || !beneficiaryId || !date) {
+    return res
+      .status(400)
+      .json({
+        success: false,
+        message: "paravatId, beneficiaryId, and date are required.",
+      });
+  }
+
+  try {
+    const visit = await Visit.findOne({ paravatId, beneficiaryId, date });
+
+    if (!visit) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Visit not found." });
+    }
+
+    const updatableFields = [
+      "status",
+      "comments",
+      "health",
+      "isAlive",
+      "CurrentWeight",
+      "isPregnant",
+      "Soldfor",
+      "latitude",
+      "longitude",
+    ];
+    updatableFields.forEach((field) => {
+      if (field in req.body) {
+        visit[field] = req.body[field];
+      }
+    });
+
+    const updatedVisit = await visit.save();
+    res.json({ success: true, data: updatedVisit });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

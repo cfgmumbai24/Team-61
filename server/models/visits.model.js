@@ -7,6 +7,13 @@ const VisitsSchema = new Schema({
   status: { type: String, enum: ["Pending", "Completed", "Incomplete"] },
   date: { type: Date },
   comments: { type: String, default: "NONE" },
+  health: { type: String },
+  isAlive: { type: Boolean },
+  CurrentWeight: { type: Number },
+  isPregnant: { type: Boolean },
+  Soldfor: { type: Number },
+  latitude: { type: String, required: false },
+  longitude: { type: String, required: false },
 });
 
 module.exports = mongoose.model("Visits", VisitsSchema);

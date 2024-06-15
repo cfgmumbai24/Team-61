@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Container, Box, TextField, Button, Typography, Link, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Container, Box, useTheme, TextField, Button, Typography, Link, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext'; 
 import { db } from '../firebase'; 
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { tokens } from "../theme";
 
 const Signup = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -70,7 +73,7 @@ const Signup = () => {
               label="Role"
               onChange={(e) => setRole(e.target.value)}
             >
-              <MenuItem value="user">User</MenuItem>
+              <MenuItem value="user">Paravet</MenuItem>
               <MenuItem value="admin">Admin</MenuItem>
               {/* Add more roles as needed */}
             </Select>

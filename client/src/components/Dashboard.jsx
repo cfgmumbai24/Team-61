@@ -5,8 +5,9 @@ import { db } from "../firebase";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import '../styles/dashboard.css'
+import PvTable from "./PvTable";
 
-const Dashboard = () => {
+const Dashboard = ({content}) => {
   const { currentUser, currentUserDetails } = useAuth();
   const [users, setUsers] = useState([]);
 
@@ -31,7 +32,12 @@ const Dashboard = () => {
   return (
     <div className='full'>
       <Sidebar/>
-      <Topbar/>
+      <div className="content">
+        <Topbar/>
+        {content === 'pvtable' && (<PvTable/>)}
+      </div>
+      
+      
     </div>
   );
 };

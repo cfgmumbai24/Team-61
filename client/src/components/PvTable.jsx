@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import Header from "./Header";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
 
 const PvTable = () => {
@@ -25,12 +26,20 @@ const PvTable = () => {
       cellClassName: "name-column--cell",
       
     },
-    
     {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
-    },
+        field: "name",
+        headerName: "Name",
+        flex: 1,
+        cellClassName: "name-column--cell",
+        renderCell: (cellValues) => (
+          <div
+            onClick={() => navigate(`/pv/${cellValues.row.id}`)}
+            style={{ cursor: 'pointer' }}
+          >
+            {cellValues.value}
+          </div>
+        ),
+      },
     {
       field: "email",
       headerName: "Email",

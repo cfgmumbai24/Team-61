@@ -1,38 +1,24 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const GoatSchema = new Schema({
-  tag: { type: String, required: true },
-  dob: { type: Date },
-  weight: { type: Number, min: 0 },
-  breed: { type: String },
-  gender: { type: String, enum: ["Male", "Female", "Unknown"] },
-  color: { type: String },
-  vaccinations: [
-    {
-      date: { type: Date },
-      vaccId: { type: Schema.Types.ObjectId, ref: "Vaccination" },
-    },
-  ],
-  issueDate: { type: Date },
-  updatedWeight: [{ type: Number }],
-  insurance: [
-    {
-      issueDatedate: { type: Date },
-      expiryDate: { type: Date },
-      insuranceid: { type: String },
-    },
-  ],
-  isAlive: { type: Boolean },
-  diseases: [{ type: String }],
-  sellingPrice: { type: Number },
-  numberOfChildren: { type: Number },
-  children: [{ type: Schema.Types.ObjectId, ref: "Goat" }],
-  comments: { type: String },
-  beneficId: { type: Schema.Types.ObjectId, ref: "Benefic" },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-  health: { type: String },
-});
+const GoatSchema = new Schema(
+  {
+    ben_id: { type: String }, // Assuming ben_id is the reference to Benefic model
+    health: { type: String },
+    isAlive: { type: Boolean },
+    gender: { type: String, enum: ["Male", "Female", "Unknown"] },
+    currentWeight: { type: Number },
+    weightArray: [
+      {
+        weight: { type: Number },
+        date: { type: Date },
+      },
+    ],
+    breed: { type: String },
+    age: { type: Number }, // Calculated based on date of birth (dob) field
+    isPregnant: { type: Boolean },
+  },
+  { timestamps: true }
+); // Adds createdAt and updatedAt fields automatically
 
 module.exports = mongoose.model("Goat", GoatSchema);

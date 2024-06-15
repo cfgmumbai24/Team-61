@@ -37,22 +37,22 @@ exports.createBanef = async (req, res) => {
 // Controller to handle POST requests to add a goat to a beneficiary
 exports.addGoatToBeneficiary = async (req, res) => {
   try {
-    const beneficiaryId = req.params.beneficiaryId;
+    const beneficiaryId = req.body.beneficiaryId;
     const tagId = req.body.tagId;
     
     // Check if beneficiaryId and tagId are present in the request
-    if (!beneficiaryId || !tagId) {
-      return res.status(400).json({ message: "Missing required parameters" });
-    }
+    
     
     // Find the beneficiary by ID
-    const beneficiary = await Baneficial.findById(beneficiaryId);
+    // console.log(beneficiaryId);
+    const beneficiary = await Baneficial.findById(String(beneficiaryId));
+    // console.log(beneficiaryId);
     if (!beneficiary) {
       return res.status(404).json({ message: "Beneficiary not found" });
     }
     
     // Add the tag ID to the array of goats
-    beneficiary.goats.push(tagId);
+    beneficiary.Goats.push(tagId);
     
     // Save the updated beneficiary
     const updatedBeneficiary = await beneficiary.save();
@@ -60,6 +60,9 @@ exports.addGoatToBeneficiary = async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
+  console.log(req.body);
+  
+
 };
 
 

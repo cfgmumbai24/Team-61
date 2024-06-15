@@ -8,13 +8,14 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const { login } = useAuth();
+    const { currentUser, login } = useAuth();
     const navigate = useNavigate();
     const handleLogin = async () => {
         setError(null)
         try {
         await login(email, password);
         // Redirect to dashboard or another page
+        
         navigate('/');
         } catch (err) {
         setError(err.message);

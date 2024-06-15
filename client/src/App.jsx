@@ -27,6 +27,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/pv-overview" element={<Dashboard content={"pvtable"} />} />
+                <Route path="/assign-goat" element={<Dashboard content={"assigngoat"} />} />
                 <Route path="/signup" element={<Signup />} />
               </Routes>
             </Router>

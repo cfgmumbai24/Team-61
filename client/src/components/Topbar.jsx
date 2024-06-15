@@ -43,7 +43,7 @@ const Topbar = () => {
     };
 
     return (
-        <Box display="flex" justifyContent="end" p={2} flexGrow={1}>
+        <Box display="flex" justifyContent="end" p={2} flexGrow={1} sx={{width:'100%'}}>
         {/* SEARCH BAR */}
         {/* <Box
             display="flex"

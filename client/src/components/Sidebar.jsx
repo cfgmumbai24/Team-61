@@ -165,11 +165,11 @@ const Sidebar = () => {
                             color={colors.grey[300]}
                             sx={{ m: "15px 0 5px 10px" }}
                         >
-                            Create
+                            Beneficiaries
                         </Typography>
                         <Item
-                            title="Create Announcement"
-                            to="/ca"
+                            title="Assign a Goat"
+                            to="/assign-goat"
                             icon={<PersonOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

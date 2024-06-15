@@ -17,8 +17,8 @@ exports.visitadd = async (req, res) => {
   }
 
   const visit = new Visit({
-    paravetId: req.body.paravetId,
-    benebeneficiaryId: req.body.benebeneficiaryId,
+    paravatId: req.body.paravatId,
+    beneficiaryId: req.body.beneficiaryId,
     status: req.body.status,
     date: req.body.date,
   });
@@ -40,5 +40,37 @@ exports.visitget = async (req, res) => {
       success: false,
       msg: error,
     });
+  }
+};
+
+exports.updateVisitStatus = async (req, res) => {
+  const paravatId = req.body.paravatId; // Assuming visitId is passed as a route parameter
+  const beneficiaryId = req.body.beneficiaryId;
+  const date = req.body.date;
+  try {
+    // Find the visit by visitId
+    const visit = await Visit.findOneAndUpdate({
+      paravatId: paravatId,
+      beneficiaryId: beneficiaryId,
+      date: date,
+    });
+
+    if (!visit) {
+      return res.status(404).json({
+        success: false,
+        message: `Visit with ID ${visitId} not found`,
+      });
+    }
+
+    // Update the status field based on req.body
+    visit.status = req.body.status;
+    console.log("visit");
+    // Save the updated visit
+    const updatedVisit = await visit.save();
+
+    res.json({ success: true, data: updatedVisit });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };

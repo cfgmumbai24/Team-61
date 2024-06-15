@@ -27,7 +27,9 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/pv-overview" element={<Dashboard content={"pvtable"} />} />
+                <Route path="/pv/:id" element={<Dashboard content={"pvinsight"} />} />
                 <Route path="/assign-goat" element={<Dashboard content={"assigngoat"} />} />
+                <Route path="/add-ben" element={<Dashboard content={"addben"} />} />
                 <Route path="/signup" element={<Signup />} />
               </Routes>
             </Router>

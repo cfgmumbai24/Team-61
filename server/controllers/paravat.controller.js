@@ -7,7 +7,7 @@ require("dotenv").config();
 // Controller to handle POST requests to create a new Paravat entry
 exports.createParavat = async (req, res) => {
   //   Check if all required fields are provided
-  const requiredFields = ["userId", "name", "address", "PhoneNumber", "Email"];
+  const requiredFields = ["userId", "name", "address", "PhoneNumber", "email"];
   const missingFields = requiredFields.filter((field) => !(field in req.body));
 
   if (missingFields.length > 0) {

@@ -17,7 +17,7 @@ const Topbar = () => {
     const colorMode = useContext(ColorModeContext);
     const navigate = useNavigate();
     
-    const [dialogOpen, setDialogOpen] =useState();
+    const [dialogOpen, setDialogOpen] =useState(false);
     const handleDialogOpen = () => {
         setDialogOpen(true);
       };
@@ -72,7 +72,7 @@ const Topbar = () => {
             <SettingsOutlinedIcon />
             </IconButton>
             <IconButton>
-            <PersonOutlinedIcon  onClick={handleDialogOpen}/>
+            <PersonOutlinedIcon  />
             </IconButton>
         </Box>
                 <Dialog open={dialogOpen} onClose={handleDialogClose}>

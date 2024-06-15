@@ -4,8 +4,9 @@ import { tokens } from "../theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./Header";
+import axios from 'axios'
 
 
 const PvTable = () => {
@@ -43,14 +44,34 @@ const PvTable = () => {
         headerAlign: "left",
         align: "left",
     },
-    {
-        field: "score",
-        headerName: "Score",
-        headerAlign: "left",
-        align: "left",
-    },
     
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3080/api/v1/paravat/find');
+        const data = response.data;
+        const arr = [];
+        data.mdg.map((item)=>{
+            // console.log(item)
+            const x = {id: item.userId, name:item.name, email:item.email, phone:item.PhoneNumber, location:item.address}
+            arr.push(x)
+        })
+        setMockData(arr);
+        // console.log(mockData)
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+      finally {
+        // console.log(mockData)
+      }
+    };
+  
+    fetchData();
+    
+  }, []);
 
   return (
     <Box sx={{width:"100%!important",}}>

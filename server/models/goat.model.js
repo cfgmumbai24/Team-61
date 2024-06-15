@@ -18,7 +18,8 @@ const GoatSchema = new Schema({
   updatedWeight: [{ type: Number }],
   insurance: [
     {
-      date: { type: Date },
+      issueDatedate: { type: Date },
+      expiryDate: { type: Date },
       insuranceid: { type: String },
     },
   ],

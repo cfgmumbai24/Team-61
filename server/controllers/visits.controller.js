@@ -1,5 +1,7 @@
 const express = require("express");
 const Visit = require("../models/visits.model");
+const Baneficial = require("../models/benef.model");
+
 require("dotenv").config({ path: "../.env" });
 
 require("dotenv").config();
@@ -76,24 +78,41 @@ exports.updateVisitStatus = async (req, res) => {
   }
 };
 
+
+///   new one
+
+
 exports.getVisitsByParavatId = async (req, res) => {
-  const paravatId = req.params.paravatId; // Assuming paravatId is passed as a route parameter
+  const paravatId = req.params.paravatId;
+
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
 
   try {
     const visits = await Visit.aggregate([
-      {
-        $match: {
-          paravatId: paravatId,
-        },
-      },
-      {
-        $sort: { date: -1 }, // Sort by date in descending order if needed
-      },
+      { $match: { paravatId: String(paravatId), date: { $gte: startOfDay, $lt: endOfDay } } },
+      { $sort: { date: -1 } }
     ]);
 
-    res.json({ success: true, data: visits });
+    const visitsWithBeneficiaries = await Promise.all(visits.map(async (visit) => {
+      if (visit.beneficiaryId.length === 24) {
+        const beneficiary = await Baneficial.findById(visit.beneficiaryId);
+        if (beneficiary) {
+          return {
+            ...visit,
+            beneficiary: beneficiary.toObject()
+          };
+        }
+      }
+      return visit;
+    }));
+
+    res.json({ success: true, data: visitsWithBeneficiaries });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+

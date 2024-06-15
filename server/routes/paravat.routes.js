@@ -1,5 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { addparavat } = require("../controllers/paravat.controller.js");
-router.post("/add", addparavat);
+const { createParavat } = require("../controllers/paravat.controller.js");
+router.post("/add", createParavat);
 module.exports = router;

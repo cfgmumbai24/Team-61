@@ -31,3 +31,15 @@ exports.createParavat = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+exports.findParavat = async (req, res) => {
+  try {
+    const paravat = await Paravat.find({});
+    return res.json({ success: true, mdg: paravat });
+  } catch (error) {
+    return res.json({
+      success: false,
+      msg: error,
+    });
+  }
+};

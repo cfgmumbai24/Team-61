@@ -6,7 +6,7 @@ const ParavatSchema = new Schema({
   name: { type: String },
   address: { type: String },
   PhoneNumber: { type: Number },
-  Email: { type: String },
+  email: { type: String },
   
 });
 

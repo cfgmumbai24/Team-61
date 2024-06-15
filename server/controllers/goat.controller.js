@@ -10,7 +10,7 @@ const addGoats = async (req, res) => {
       currentWeight,
       weight,
       breed,
-      age,
+      year_of_birth,
       isPregnant,
       date,
     } = req.body;
@@ -29,10 +29,9 @@ const addGoats = async (req, res) => {
         },
       ],
       breed,
-      age,
+      year_of_birth,
       isPregnant,
     });
-
     // Save the new goat object to the database
     const savedGoat = await newGoat.save();
     res.status(201).json(savedGoat); // Respond with the saved goat object

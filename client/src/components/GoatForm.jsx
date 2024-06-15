@@ -2,22 +2,32 @@ import React, { useState } from 'react';
 import { TextField, Button, FormControl, useTheme, InputLabel, Select, MenuItem, FormHelperText, Box } from '@mui/material';
 import Header from './Header';
 import { tokens } from "../theme";
+import axios from 'axios';
+
 const GoatForm = () => {
   const [formData, setFormData] = useState({
-    weight: '',
+    currentWeight: '',
     breed: '',
     gender: '',
-    colour: '',
+    year_of_birth: '',
     beneficiary_id: '',
   });
-
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData); // Here you would usually send the data to a server or handle it according to your needs
+    const { beneficiary_id, ...data } = formData; // Exclude beneficiary_id from the data object
+    try {
+      const response = await axios.post('http://localhost:3080/api/v1/goat/add', data);
+      console.log(response.data._id); // Handle the response according to your needs
+      const tag_id = response.data._id;
+      const secondResponse = await axios.post('http://localhost:3080/api/v1/banef/addgoat', { tagId:tag_id, beneficiaryId:beneficiary_id });
+      console.log(secondResponse.data); // Handle the response according to your needs
+      setFormData({currentWeight:'',breed:'',gender:'',year_of_birth:'',beneficiary_id:''});
+    } catch (error) {
+      console.error(error); // Handle the error according to your needs
+    }
   };
 
   const theme = useTheme();
@@ -28,10 +38,10 @@ const GoatForm = () => {
       <Header title="Assign A Goat"/>
       <TextField
         required
-        id="weight"
-        name="weight"
+        id="currentWeight"
+        name="currentWeight"
         label="Weight (in kg)"
-        value={formData.weight}
+        value={formData.currentWeight}
         onChange={handleChange}
         sx={{ width: '100%!important' }}
         type='number'
@@ -61,12 +71,12 @@ const GoatForm = () => {
         </Select>
         <FormHelperText>Required</FormHelperText>
       </FormControl>
-      <TextField
+        <TextField
         required
-        id="colour"
-        name="colour"
-        label="Colour"
-        value={formData.colour}
+        id="year_of_birth"
+        name="year_of_birth"
+        label="Year of birth"
+        value={formData.year_of_birth}
         onChange={handleChange}
         sx={{ width: '100%!important' }}
       />

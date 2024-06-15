@@ -15,7 +15,7 @@ const GoatSchema = new Schema(
       },
     ],
     breed: { type: String },
-    age: { type: Number }, // Calculated based on date of birth (dob) field
+    year_of_birth: { type: Number }, // Calculated based on date of birth (dob) field
     isPregnant: { type: Boolean },
   },
   { timestamps: true }

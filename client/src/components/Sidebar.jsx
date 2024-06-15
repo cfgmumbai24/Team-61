@@ -23,6 +23,7 @@ import { auth, db } from '../firebase'; // Import db from firebase.js
 
 
 
+
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -104,6 +105,17 @@ const Sidebar = () => {
                     {/* USER INFO */}
                     {!isCollapsed && (
                         <Box mb="25px">
+                            {/* <Box display="flex" justifyContent="center" alignItems="center">
+                                
+                                <img
+                                    alt="profile-user"
+                                    width="200px"
+                                    height="100px"
+                                    src={'eagl-logo.png'}
+                                    style={{ cursor: "pointer", borderRadius: "50%" }}
+                                />
+                                
+                            </Box> */}
                             <Box textAlign="center">
                                 <Typography
                                     variant="h3"
@@ -145,13 +157,13 @@ const Sidebar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
-                        <Item
+                        {/* <Item
                             title="Events"
                             to="/events"
                             icon={<ContactsOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
-                        />
+                        /> */}
                         {/* <Item
                             title="Invoices Balances"
                             to="/invoices"
@@ -185,6 +197,13 @@ const Sidebar = () => {
                             title="Create Event"
                             to="/ce"
                             icon={<CalendarTodayOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                           <Item
+                            title="Benificiary"
+                            to="/bv-overview"
+                            icon={<PersonOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />

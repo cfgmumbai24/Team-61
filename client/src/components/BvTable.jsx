@@ -1,87 +1,86 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../theme";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import { useState, useEffect } from "react";
 import Header from "./Header";
-import axios from 'axios'
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
 
-
-const PvTable = () => {
+const BvTable = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
-  const [mockData, setMockData] = useState([
-  ]);
+  const [mockData, setMockData] = useState([]);
+
   const columns = [
     { field: "id", headerName: "ID" },
     {
-        field: "name",
-        headerName: "Name",
-        flex: 1,
-        cellClassName: "name-column--cell",
-        renderCell: (cellValues) => (
-          <div
-            onClick={() => navigate(`/pv/${cellValues.row.id}`)}
-            style={{ cursor: 'pointer' }}
-          >
-            {cellValues.value}
-          </div>
-        ),
-      },
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      renderCell: (cellValues) => (
+        <div>
+          {cellValues.value}
+        </div>
+      ),
+    },
     {
-      field: "email",
-      headerName: "Email",
+      field: "address",
+      headerName: "Address",
       flex: 1,
     },
     {
-        field: "location",
-        headerName: "Location",
-        headerAlign: "left",
-        align: "left",
+      field: "latitude",
+      headerName: "Latitude",
+      headerAlign: "left",
+      align: "left",
     },
-    
+    {
+      field: "longitude",
+      headerName: "Longitude",
+      headerAlign: "left",
+      align: "left",
+    },
+    {
+      field: "noofgoats",
+      headerName: "Goats",
+      headerAlign: "left",
+      align: "left",
+    },
+
   ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3080/api/v1/paravat/find');
+        const response = await axios.get("http://localhost:3080/api/v1/banef/all");
         const data = response.data;
-        const arr = [];
-        data.mdg.map((item)=>{
-            // console.log(item)
-            const x = {id: item.userId, name:item.name, email:item.email, phone:item.PhoneNumber, location:item.address}
-            arr.push(x)
-        })
+
+        const arr = data.msg.map((item) => ({
+          address:item.address,
+          id:item._id,
+          name: item.name,
+          noofgoats:item.Goats.length,
+          latitude: item.latitude,
+          longitude:item.longitude
+        }));
         setMockData(arr);
-        // console.log(mockData)
-        
       } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-      finally {
-        // console.log(mockData)
+        console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
-    
   }, []);
 
   return (
-    <Box sx={{width:"100%!important",}}>
-         <Header title="Paravets" subtitle="Paravet Info" />
+    <Box sx={{ width: "100%!important" }}>
+      <Header title="Beneficiers" subtitle="Paravet Info" />
       <Box
         m="40px 0 0 0"
         height="75vh"
-        
         sx={{
-            
           "& .MuiDataGrid-root": {
             border: "none",
           },
@@ -113,4 +112,4 @@ const PvTable = () => {
   );
 };
 
-export default PvTable;
+export default BvTable;

@@ -1,5 +1,5 @@
 const express = require("express");
+const { addGoats } = require("../controllers/goat.controller");
 const router = express.Router();
-const {addgoats} = require("../controllers/goat.controller.js");
-router.post("/add", addgoats);
+router.post("/add", addGoats);
 module.exports = router;

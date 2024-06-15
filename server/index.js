@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const bodyParser = require("body-parser");
 
+const postroutes = require("./routes/goats.routes.js");
 const app = express();
 app.use(
   cors({
@@ -14,7 +15,6 @@ app.use(
   })
 );
 
-
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
@@ -22,15 +22,13 @@ dotenv.config();
 
 connectDB();
 
-
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb" }));
-
-
+app.use("/api/v1/goat", postroutes);
 app.listen(3080, () => {
   console.log("Server is running on port");
 });

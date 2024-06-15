@@ -1,19 +1,36 @@
 import React, { useState, useCallback, useMemo, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 const center = {
   lat: 18.91070000,
   lng: 73.32354000,
 };
-
+function LocationMarker() {
+    const [position, setPosition] = useState(null)
+    const map = useMapEvents({
+      click() {
+        map.locate()
+      },
+      locationfound(e) {
+        setPosition(e.latlng)
+        map.flyTo(e.latlng, map.getZoom())
+      },
+    })
+  
+    return position === null ? null : (
+      <Marker position={position}>
+        <Popup>You are here</Popup>
+      </Marker>
+    )
+  }
 function DraggableMarker({formData,setFormData}) {
   const [draggable, setDraggable] = useState(false);
   const [position, setPosition] = useState(center);
   const [data, setData] = useState([center]);
 
   const markerRef = useRef(null);
-
+  
   const eventHandlers = useMemo(
     () => ({
       dragend() {
@@ -58,6 +75,7 @@ console.log(d);
 
 export default function MyMap({formData, setFormData}) {
   return (
+ <>
     <MapContainer
       center={{ lat: 18.91070000, lng: 73.32354000 }}
       zoom={13}
@@ -69,6 +87,11 @@ export default function MyMap({formData, setFormData}) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <DraggableMarker formData={formData} setFormData={setFormData} />
+      <LocationMarker />
     </MapContainer>
+    
+    
+    
+    </>
   );
 }

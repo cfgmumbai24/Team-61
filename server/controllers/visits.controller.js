@@ -74,3 +74,25 @@ exports.updateVisitStatus = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+exports.getVisitsByParavatId = async (req, res) => {
+  const paravatId = req.params.paravatId; // Assuming paravatId is passed as a route parameter
+
+  try {
+    const visits = await Visit.aggregate([
+      {
+        $match: {
+          paravatId: paravatId,
+        },
+      },
+      {
+        $sort: { date: -1 }, // Sort by date in descending order if needed
+      },
+    ]);
+
+    res.json({ success: true, data: visits });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

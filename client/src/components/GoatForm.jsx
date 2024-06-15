@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box } from '@mui/material';
+import { TextField, Button, FormControl, useTheme, InputLabel, Select, MenuItem, FormHelperText, Box } from '@mui/material';
 import Header from './Header';
+import { tokens } from "../theme";
 const GoatForm = () => {
   const [formData, setFormData] = useState({
     weight: '',
@@ -18,6 +19,9 @@ const GoatForm = () => {
     event.preventDefault();
     console.log(formData); // Here you would usually send the data to a server or handle it according to your needs
   };
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   return (
     <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' }, display: 'flex', flexDirection: 'column', alignItems: 'center' , width: '50%'}}>
@@ -75,7 +79,7 @@ const GoatForm = () => {
         onChange={handleChange}
         sx={{ width: '100%!important' }}
       />
-      <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+      <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: colors.greenAccent[300], color:colors.blueAccent[700]}}>
         Submit
       </Button>
     </Box>

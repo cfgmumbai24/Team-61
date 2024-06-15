@@ -53,12 +53,14 @@ const PvTable = () => {
   ];
 
   return (
-    <Box >
+    <Box sx={{width:"100%!important",}}>
          <Header title="Paravets" subtitle="Paravet Info" />
       <Box
         m="40px 0 0 0"
         height="75vh"
+        
         sx={{
+            
           "& .MuiDataGrid-root": {
             border: "none",
           },

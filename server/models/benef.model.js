@@ -8,7 +8,7 @@ const BaneficialSchema = new Schema({
   latitude: { type: String, required: true },
   longitude: { type: String, required: true },
   address: { type: String, required: true },
-  PhoneNumber: { type: Number, required: true },
+  PhoneNumber: { type: Number, required: false },
   Goats : [ {type:String}]
   
 });

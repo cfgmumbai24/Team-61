@@ -8,7 +8,7 @@ require("dotenv").config({ path: "../.env" });
 // Controller to handle POST requests to create a new Baneficial entry
 exports.createBanef = async (req, res) => {
   // Check if all required fields are provided
-  const requiredFields = ["name", "latitude", "longitude", "address", "PhoneNumber"];
+  const requiredFields = ["name", "latitude", "longitude", "address"];
   const missingFields = requiredFields.filter((field) => !(field in req.body));
 
   if (missingFields.length > 0) {

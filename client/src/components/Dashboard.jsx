@@ -8,6 +8,7 @@ import '../styles/dashboard.css'
 import PvTable from "./PvTable";
 import GoatForm from "./GoatForm";
 import BeneficiaryForm from "./BeneficiaryForm";
+import PvInsight from "./PvInsight";
 
 const Dashboard = ({content}) => {
   const { currentUser, currentUserDetails } = useAuth();
@@ -39,6 +40,7 @@ const Dashboard = ({content}) => {
         {content === 'pvtable' && (<PvTable/>)}
         {content === 'assigngoat' && (<GoatForm/>)}
         {content === 'addben' && (<BeneficiaryForm/>)}
+        {content === 'pvinsight' && (<PvInsight/>)}
       </div>
       
       

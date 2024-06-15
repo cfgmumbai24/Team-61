@@ -15,7 +15,7 @@ const Signup = () => {
   const [phoneNumber, setPhoneNumber] = useState(''); 
   const [role, setRole] = useState('');
   const [error, setError] = useState('');
-  const { signup } = useAuth(); // Adjust according to your Auth context
+  const { signup, logout, login } = useAuth(); // Adjust according to your Auth context
   
   const navigate = useNavigate();
   const handleSignup = async (e) => {
@@ -40,7 +40,7 @@ const Signup = () => {
           name: fullName,
           address: "Nirlon Park, Mumbai, India", // Add a field in your form to collect this
           PhoneNumber: phoneNumber,
-          Email: email,
+          email: email,
         };
     
         axios.post('http://localhost:3080/api/v1/paravat/add', paravatData)
@@ -55,7 +55,8 @@ const Signup = () => {
       } else {
         // Handle other roles or general signup without role 'paravet'
       }
-      navigate('/login'); 
+      login('admin@gmail.com', '123456')
+      setError("User created successfully")
     } catch (error) {
       setError(error.message);
     }

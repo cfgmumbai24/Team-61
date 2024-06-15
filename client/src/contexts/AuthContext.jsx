@@ -61,7 +61,7 @@ useEffect(() => {
     if (currentUser) {
         const fetchUserDetails = async () => {
             try {
-                console.log(currentUser)
+                // console.log(currentUser)
                 const userRef = doc(db, "users", currentUser.uid)
                 const userSnapshot = await getDoc(userRef)
                 if (userSnapshot.exists()) {

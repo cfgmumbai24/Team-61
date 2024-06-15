@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 
 const postroutes = require("./routes/goats.routes.js");
 const paravatroutes = require("./routes/paravat.routes.js");
-const visitroutes = require("./routes/visits.routes.js");
+const banefroutes = require("./routes/benef.routes.js");
 const app = express();
 app.use(
   cors({
@@ -32,7 +32,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb" }));
 app.use("/api/v1/goat", postroutes);
 app.use("/api/v1/paravat", paravatroutes);
-app.use("/api/v1/visit", visitroutes);
+app.use("/api/v1/banef", banefroutes);
 app.listen(3080, () => {
   console.log("Server is running on port");
 });

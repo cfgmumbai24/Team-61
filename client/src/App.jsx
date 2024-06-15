@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard";
 import PvTable from "./components/PvTable";
+import MyMap from "./components/Map";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/assign-goat" element={<Dashboard content={"assigngoat"} />} />
                 <Route path="/add-ben" element={<Dashboard content={"addben"} />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/map" element={<MyMap />} />
               </Routes>
             </Router>
           </AuthProvider>

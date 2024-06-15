@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, useTheme } from '@mui/material';
 import { tokens } from "../theme";
 import Header from './Header';
+import MyMap from './Map';
 
 const BeneficiaryForm = () => {
     const theme = useTheme();
@@ -25,7 +26,7 @@ const BeneficiaryForm = () => {
     console.log(formData); // Here you would usually send the data to a server or handle it according to your needs
   };
 
-  return (
+  return (<>
     <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' }, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '70%' }}>
       <Header title="Add a Beneficiary"/>
       <TextField
@@ -79,6 +80,8 @@ const BeneficiaryForm = () => {
         Submit
       </Button>
     </Box>
+    <MyMap formData={formData} setFormData={setFormData}/>
+    </>
   );
 };
 

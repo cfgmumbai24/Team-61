@@ -136,11 +136,11 @@ const Sidebar = () => {
                             color={colors.grey[300]}
                             sx={{ m: "15px 0 5px 10px" }}
                         >
-                            View
+                            Paravet
                         </Typography>
                         <Item
-                            title="Announcements"
-                            to="/announcements"
+                            title="Overview"
+                            to="/pv-overview"
                             icon={<PeopleOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

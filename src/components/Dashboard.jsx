@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import {collection, getDocs} from "firebase/firestore";
 import { db } from "../firebase";
+import Sidebar from "./Sidebar";
+import Topbar from "./Topbar";
+import '../styles/dashboard.css'
 
 const Dashboard = () => {
   const { currentUser, currentUserDetails } = useAuth();
@@ -26,16 +29,9 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div>
-      <h4>Current User</h4>
-      <p>{JSON.stringify(currentUserDetails)}</p>
-
-      <h4>All Users</h4>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{JSON.stringify(user)}</li>
-        ))}
-      </ul>
+    <div className='full'>
+      <Sidebar/>
+      <Topbar/>
     </div>
   );
 };

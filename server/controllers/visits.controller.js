@@ -64,6 +64,7 @@ exports.updateVisitStatus = async (req, res) => {
 
     // Update the status field based on req.body
     visit.status = req.body.status;
+    visit.comments = req.body.comments;
     console.log("visit");
     // Save the updated visit
     const updatedVisit = await visit.save();

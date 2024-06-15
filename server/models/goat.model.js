@@ -15,8 +15,13 @@ const GoatSchema = new Schema({
     },
   ],
   issueDate: { type: Date },
-  updatedWeight: { type: Number },
-  insurance: { type: Boolean },
+  updatedWeight: [{ type: Number }],
+  insurance: [
+    {
+      date: { type: Date },
+      insuranceid: { type: String },
+    },
+  ],
   isAlive: { type: Boolean },
   diseases: [{ type: String }],
   sellingPrice: { type: Number },
@@ -26,6 +31,7 @@ const GoatSchema = new Schema({
   beneficId: { type: Schema.Types.ObjectId, ref: "Benefic" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  health: { type: String },
 });
 
 module.exports = mongoose.model("Goat", GoatSchema);

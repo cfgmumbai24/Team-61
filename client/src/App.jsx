@@ -34,6 +34,7 @@ function App() {
                 <Route path="/assign-goat" element={<Dashboard content={"assigngoat"} />} />
                 <Route path="/add-ben" element={<Dashboard content={"addben"} />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/admin" element={<Dashboard content={"admin"} />} />
                 <Route path="/map" element={<MyMap />} />
               </Routes>
             </Router>

@@ -1,5 +1,6 @@
 const express = require("express");
+const { addGoats, findgoats } = require("../controllers/goat.controller");
 const router = express.Router();
-const { createParavat } = require("../controllers/paravat.controller.js");
-router.post("/add", createParavat);
+router.post("/add", addGoats);
+router.get("/findgoat", findgoats);
 module.exports = router;

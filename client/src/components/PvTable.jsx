@@ -4,19 +4,17 @@ import { tokens } from "../theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./Header";
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 
 const PvTable = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
   const [mockData, setMockData] = useState([
-    { id: 1, name: "John Doe", phone: "123-456-7890", email: "john.doe@example.com", location: "New York", score: 85 },
-    { id: 2, name: "Jane Smith", phone: "098-765-4321", email: "jane.smith@example.com", location: "Los Angeles", score: 92 },
-    { id: 3, name: "Alice Johnson", phone: "555-123-4567", email: "alice.johnson@example.com", location: "Chicago", score: 78 },
-    { id: 4, name: "Bob Brown", phone: "555-987-6543", email: "bob.brown@example.com", location: "Houston", score: 88 },
-    { id: 5, name: "Charlie Davis", phone: "555-654-3210", email: "charlie.davis@example.com", location: "Phoenix", score: 95 }
   ]);
   const columns = [
     { field: "id", headerName: "ID" },
@@ -25,6 +23,7 @@ const PvTable = () => {
       headerName: "Name",
       flex: 1,
       cellClassName: "name-column--cell",
+      
     },
     
     {
@@ -43,14 +42,34 @@ const PvTable = () => {
         headerAlign: "left",
         align: "left",
     },
-    {
-        field: "score",
-        headerName: "Score",
-        headerAlign: "left",
-        align: "left",
-    },
     
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3080/api/v1/paravat/find');
+        const data = response.data;
+        const arr = [];
+        data.mdg.map((item)=>{
+            // console.log(item)
+            const x = {id: item.userId, name:item.name, email:item.email, phone:item.PhoneNumber, location:item.address}
+            arr.push(x)
+        })
+        setMockData(arr);
+        // console.log(mockData)
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+      finally {
+        // console.log(mockData)
+      }
+    };
+  
+    fetchData();
+    
+  }, []);
 
   return (
     <Box sx={{width:"100%!important",}}>

@@ -5,21 +5,23 @@ import { db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { tokens } from "../theme";
-
+import axios from 'axios';
 const Signup = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState(''); 
   const [role, setRole] = useState('');
   const [error, setError] = useState('');
-  const { signup } = useAuth(); // Adjust according to your Auth context
+  const { signup, logout, login } = useAuth(); // Adjust according to your Auth context
+  
   const navigate = useNavigate();
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
-    if (!fullName || !email || !password || !role) {
+    if (!fullName || !email || !password || !role || !phoneNumber) {
       setError('Please fill in all fields');
       return;
     }
@@ -32,8 +34,29 @@ const Signup = () => {
         email,
         role,
       });
-      
-      navigate('/login'); 
+      if (role === 'paravet') {
+        const paravatData = {
+          userId: uid, // Ensure you have a way to generate or fetch this ID
+          name: fullName,
+          address: "Nirlon Park, Mumbai, India", // Add a field in your form to collect this
+          PhoneNumber: phoneNumber,
+          email: email,
+        };
+    
+        axios.post('http://localhost:3080/api/v1/paravat/add', paravatData)
+          .then(response => {
+            console.log('Signup Success:', response.data);
+            // Handle success (e.g., redirect to login or dashboard)
+          })
+          .catch(error => {
+            console.error('Signup Error:', error);
+            // Handle error (e.g., show error message)
+          });
+      } else {
+        // Handle other roles or general signup without role 'paravet'
+      }
+      login('admin@gmail.com', '123456')
+      setError("User created successfully")
     } catch (error) {
       setError(error.message);
     }
@@ -66,6 +89,7 @@ const Signup = () => {
           <TextField label="Full Name" variant="outlined" margin="normal" fullWidth value={fullName} onChange={(e) => setFullName(e.target.value)} />
           <TextField label="Email" variant="outlined" margin="normal" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
           <TextField label="Password" type="password" variant="outlined" margin="normal" fullWidth value={password} onChange={(e) => setPassword(e.target.value)} />
+          <TextField label="Phone Number" variant="outlined" type={'number'} margin="normal" fullWidth value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} /> 
           <FormControl fullWidth margin="normal">
             <InputLabel>Role</InputLabel>
             <Select
@@ -73,12 +97,12 @@ const Signup = () => {
               label="Role"
               onChange={(e) => setRole(e.target.value)}
             >
-              <MenuItem value="user">Paravet</MenuItem>
+              <MenuItem value="paravet">Paravet</MenuItem>
               <MenuItem value="admin">Admin</MenuItem>
               {/* Add more roles as needed */}
             </Select>
           </FormControl>
-          <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleSignup}>
+          <Button variant="contained" color="secondary" fullWidth sx={{ mt: 2 }} onClick={handleSignup}>
             Sign up
           </Button>
           {error && (
@@ -86,9 +110,9 @@ const Signup = () => {
               {error}
             </Typography>
           )}
-          <Typography variant="body2" sx={{ mt: 2 }}>
+          {/* <Typography variant="body2" sx={{ mt: 2 }}>
             Already have an account? <Link href="/login">Log in</Link>
-          </Typography>
+          </Typography> */}
         </Box>
       </Box>
     </Container>

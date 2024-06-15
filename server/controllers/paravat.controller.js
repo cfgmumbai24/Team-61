@@ -7,7 +7,7 @@ require("dotenv").config();
 // Controller to handle POST requests to create a new Paravat entry
 exports.createParavat = async (req, res) => {
   //   Check if all required fields are provided
-  const requiredFields = ["userId", "name", "address", "PhoneNumber", "Email"];
+  const requiredFields = ["userId", "name", "address", "PhoneNumber", "email"];
   const missingFields = requiredFields.filter((field) => !(field in req.body));
 
   if (missingFields.length > 0) {
@@ -29,5 +29,17 @@ exports.createParavat = async (req, res) => {
     res.status(201).json(newParavat);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+};
+
+exports.findParavat = async (req, res) => {
+  try {
+    const paravat = await Paravat.find({});
+    return res.json({ success: true, mdg: paravat });
+  } catch (error) {
+    return res.json({
+      success: false,
+      msg: error,
+    });
   }
 };

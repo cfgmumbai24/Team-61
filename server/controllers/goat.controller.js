@@ -1,66 +1,56 @@
 const Goat = require("../models/goat.model");
-
-const addgoats = async (req, res, next) => {
+const addGoats = async (req, res) => {
   try {
+    // Extract data from req.body
     const {
-      tag,
-      dob,
+      ben_id,
+      health,
+      isAlive,
+      gender,
+      currentWeight,
       weight,
       breed,
-      gender,
-      color,
-      vaccinations,
-      issueDate,
-      updatedWeight,
-      insurance,
-      isAlive,
-      diseases,
-      sellingPrice,
-      numberOfChildren,
-      children,
-      comments,
-      beneficId,
+      age,
+      isPregnant,
+      date,
     } = req.body;
 
-    // Check for required fields
-    if (!tag || !dob || !weight) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: "Tag, DOB, and Weight are required fields.",
-        });
-    }
-
-    // Create a new Goat object
+    // Create a new goat object
     const newGoat = new Goat({
-      tag,
-      dob,
-      weight,
-      breed,
-      gender,
-      color,
-      vaccinations,
-      issueDate,
-      updatedWeight,
-      insurance,
+      ben_id,
+      health,
       isAlive,
-      diseases,
-      sellingPrice,
-      numberOfChildren,
-      children,
-      comments,
-      beneficId,
+      gender,
+      currentWeight,
+      weightArray: [
+        {
+          weight,
+          date,
+        },
+      ],
+      breed,
+      age,
+      isPregnant,
     });
 
-    // Save the Goat to the database
-    await newGoat.save();
-
-    res.status(201).json({ success: true, data: newGoat });
-  } catch (err) {
-    console.error("Error in adding goat:", err);
-    res.status(500).json({ success: false, error: err.message });
+    // Save the new goat object to the database
+    const savedGoat = await newGoat.save();
+    res.status(201).json(savedGoat); // Respond with the saved goat object
+  } catch (error) {
+    console.error("Error adding new goat:", error);
+    res.status(500).json({ error: "Failed to add new goat" }); // Handle error
   }
 };
 
-module.exports = { addgoats };
+const findgoats = async (req, res) => {
+  try {
+    const goats = await Goat.find();
+
+    res.status(201).json(goats); // Respond with the saved goat object
+  } catch (error) {
+    console.error("Error finding  goat:", error);
+    res.status(500).json({ error: "Failed to find  goat" }); // Handle error
+  }
+};
+
+module.exports = { addGoats, findgoats };

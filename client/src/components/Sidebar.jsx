@@ -168,6 +168,13 @@ const Sidebar = () => {
                             Beneficiaries
                         </Typography>
                         <Item
+                            title="Add a Benificiary"
+                            to="/add-ben"
+                            icon={<PersonOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
                             title="Assign a Goat"
                             to="/assign-goat"
                             icon={<PersonOutlinedIcon />}

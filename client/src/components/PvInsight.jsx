@@ -88,11 +88,7 @@ const StatBox = () => {
 
                 const todaysVisits = visits.filter(visit => {
                     // Assuming visit has a date property in YYYY-MM-DD format
-                    console.log()
-                    console.log("TEST" + id)
                     const visitDate = new Date(visit.date).toISOString().split('T')[0];
-                    console.log(visitDate)
-                    console.log(today)
                     return visit.paravatId === id && visitDate === today;
                 });
 

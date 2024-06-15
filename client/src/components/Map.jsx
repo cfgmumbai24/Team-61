@@ -80,7 +80,7 @@ export default function MyMap({formData, setFormData}) {
       center={{ lat: 18.91070000, lng: 73.32354000 }}
       zoom={13}
       scrollWheelZoom={false}
-      style={{ height: "500px", width: "800px", zIndex: "9999" }}
+      style={{ height: "500px", width: "750px", zIndex: "9999" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

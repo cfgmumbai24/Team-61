@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const VisitListScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { beneficiary } = route.params;
+  const { beneficiary } = route.params || {};
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +45,7 @@ const VisitListScreen = () => {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
-  if (error && data.length === 0) {
+  if (error) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Error: {error.message}</Text>
@@ -53,32 +53,35 @@ const VisitListScreen = () => {
     );
   }
 
-  const handlePress = (beneficiary) => {
-    navigation.navigate('GoatDetails', { beneficiary: beneficiary });
+  const handlePress = (selectedBeneficiary) => {
+    navigation.navigate('GoatDetails', { beneficiary: selectedBeneficiary });
   };
+
+  // Filter out items with undefined or null beneficiaryId
+  const filteredData = data.filter(item => item.beneficiaryId);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Visit List:</Text>
-      {data.length === 0 ? (
+      {filteredData.length === 0 ? (
         <Text style={styles.errorText}>No visits available.</Text>
       ) : (
-        <FlatList
-          data={data}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            // console.log(item),
-            console.log(data),
-            <TouchableOpacity onPress={() => handlePress(data[0].beneficiary)} style={styles.itemContainer}>
-              <Text style={styles.itemDescription}>Beneficiary ID: {data[0].beneficiaryId}</Text>
-              <Text style={styles.itemDescription}>Beneficiary Name: {data[0].beneficiary.name}</Text>
-              <Text style={styles.itemDescription}>Beneficiary Address: {data[0].beneficiary.address}</Text>
-              <Text style={styles.itemDescription}>Status: {data[0].status}</Text>
-              <Text style={styles.itemDescription}>Date: {new Date(data[0].date).toLocaleDateString()}</Text>
-              <Text style={styles.itemDescription}>Comments: {data[0].comments}</Text>
-            </TouchableOpacity>
-          )}
-        />
+        filteredData.map((item, index) => (
+          <TouchableOpacity key={index} onPress={() => handlePress(item.beneficiary)} style={styles.itemContainer}>
+            <Text style={styles.itemDescription}>Beneficiary ID: {item.beneficiaryId}</Text>
+            {item.beneficiary ? (
+              <>
+                <Text style={styles.itemDescription}>Beneficiary Name: {item.beneficiary.name}</Text>
+                <Text style={styles.itemDescription}>Beneficiary Address: {item.beneficiary.address}</Text>
+              </>
+            ) : (
+              <Text style={styles.itemDescription}>Beneficiary Information Unavailable</Text>
+            )}
+            <Text style={styles.itemDescription}>Status: {item.status}</Text>
+            <Text style={styles.itemDescription}>Date: {new Date(item.date).toLocaleDateString()}</Text>
+            <Text style={styles.itemDescription}>Comments: {item.comments}</Text>
+          </TouchableOpacity>
+        ))
       )}
     </View>
   );
@@ -110,11 +113,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
-  },
-  itemTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
   },
   itemDescription: {
     fontSize: 14,

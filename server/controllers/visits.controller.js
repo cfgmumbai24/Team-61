@@ -115,25 +115,26 @@ exports.getVisitsByParavatId = async (req, res) => {
 
 // New update controller
 exports.updateVisit = async (req, res) => {
-  const { paravatId, beneficiaryId } = req.body;
-console.log(req.body)
+  const { paravatId, beneficiaryId, tagId } = req.body;
+
   if (!paravatId || !beneficiaryId) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "paravatId, beneficiaryId, and date are required.",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "paravatId, beneficiaryId, and date are required.",
+    });
   }
 
   try {
     const visit = await Visit.findOne({ paravatId, beneficiaryId });
-
-    // if (!visit) {
-    //   return res
-    //     .status(404)
-    //     .json({ success: false, message: "Visit not found." });
-    // }
+    const goat = await Goat.findOne({ tagId });
+    if (!visit) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Visit not found." });
+    }
+    if (!goat) {
+      return res.json({ success: false, msg: "goat not found" });
+    }
 
     const updatableFields = [
       "status",
@@ -170,7 +171,6 @@ goat.weightArray.push({ weight: currentWeight, date: new Date() });
     const updatedGoat = await goat.save();
     res.json({ success: true, data: updatedVisit, goatjson: updatedGoat });
   } catch (error) {
-    console.log(error)
     res.status(500).json({ success: false, message: error.message });
   }
 };

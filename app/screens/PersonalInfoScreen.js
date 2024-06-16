@@ -32,6 +32,7 @@ const PersonalInfoScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <TextInput
+        editable={false}
         placeholderTextColor="white"
         style={styles.input}
         placeholder="Goat tag ID"

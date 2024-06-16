@@ -193,13 +193,13 @@ const Sidebar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
-                        <Item
+                        {/* <Item
                             title="Create Event"
                             to="/ce"
                             icon={<CalendarTodayOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
-                        />
+                        /> */}
                            <Item
                             title="Benificiary"
                             to="/bv-overview"

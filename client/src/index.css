@@ -5,17 +5,20 @@
 }
 
 .sidebar {
-  position: absolute;
+ position: absolute;
   left: 0;
-  min-height: 100dvh;
+  bottom: 0;
+  height: 100vh;
 }
 
 body {
   min-height: 100vh;
   min-width: 100vw;
+  overflow-x: hidden;
 }
 #root {
   padding: 0;
   min-height: 100vh;
   min-width: 100vw;
+  overflow-x: hidden;
 }

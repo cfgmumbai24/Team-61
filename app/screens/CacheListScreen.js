@@ -34,9 +34,10 @@ const CacheListScreen = ({ navigation }) => {
       console.log('Data:', updatedFormData);
 
       try {
-        const response = await axios.post('http://100.72.59.2:3080/api/v1/visit/update', updatedFormData);
+        // const response = await axios.post('http://100.72.59.2:3080/api/v1/visit/update', updatedFormData);
         Alert.alert('Success', 'Data saved successfully');
         // Optionally, clear the cache or update the UI upon successful submission
+        console.log(updatedFormData);
         await AsyncStorage.removeItem('formData');
         setFormDataList([]);
       } catch (error) {

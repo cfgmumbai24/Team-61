@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.post("/add", visitadd);
 router.get("/find", visitget);
-router.put("/update", updateVisit);
+router.post("/update", updateVisit);
 router.get("/find/:paravatId", getVisitsByParavatId);
 module.exports = router;

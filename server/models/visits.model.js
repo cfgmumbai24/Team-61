@@ -5,7 +5,7 @@ const VisitsSchema = new Schema({
   paravatId: { type: String },
   beneficiaryId: { type: String },
   status: { type: String, enum: ["Pending", "Completed", "Incomplete"] },
-  date: { type: Date },
+  date: { type: Date ,default: Date.now},
   comments: { type: String, default: "NONE" },
   health: { type: String },
   isAlive: { type: Boolean },

@@ -1,38 +1,40 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const GoatDetailScreen = ({ route }) => {
-  const { data } = route.params; // Assuming data is the object containing the goats array
+  const { beneficiary } = route.params;
   const navigation = useNavigation();
 
-    const handleNext = () => {
-        navigation.navigate('PersonalInfo');
-    }
+  const handleNext = () => {
+    navigation.navigate('PersonalInfo');
+  }
 
-  return <Button title="Add Goat" onPress={handleNext} />;
+  const handleGoatPress = (goatId) => {
+    navigation.navigate('PersonalInfo', { goatId });
+  }
 
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Details for {data.name}</Text>
-//       <Text style={styles.subtitle}>Address: {data.address}</Text>
-//       <Text style={styles.subtitle}>Phone Number: {data.PhoneNumber}</Text>
-//       <Text style={styles.subtitle}>Location: {data.latitude}, {data.longitude}</Text>
-//       <Text style={styles.subtitle}>Goats:</Text>
-//       <FlatList
-//         data={data.Goats}
-//         keyExtractor={(item) => item._id}
-//         renderItem={({ item }) => (
-//           <View style={styles.goatItem}>
-//             <Text style={styles.goatName}>{item.name}</Text>
-//             <Text style={styles.goatDetails}>Age: {item.age}</Text>
-//             <Text style={styles.goatDetails}>Color: {item.color}</Text>
-//             {/* Add more goat details as needed */}
-//           </View>
-//         )}
-//       />
-//     </View>
-//   );
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Details for {beneficiary.name}</Text>
+      <Text style={styles.subtitle}>Address: {beneficiary.address}</Text>
+      <Text style={styles.subtitle}>Phone Number: {beneficiary.PhoneNumber}</Text>
+      <Text style={styles.subtitle}>Location: {beneficiary.latitude}, {beneficiary.longitude}</Text>
+      <Text style={styles.subtitle}>Goats:</Text>
+      <FlatList
+        data={beneficiary.Goats}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleGoatPress(item)}>
+            <View style={styles.goatItem}>
+              <Text style={styles.goatDetails}>Tag: {item}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+      <Button title="Add Goat" onPress={handleNext} />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -60,10 +62,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
-  },
-  goatName: {
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   goatDetails: {
     fontSize: 14,

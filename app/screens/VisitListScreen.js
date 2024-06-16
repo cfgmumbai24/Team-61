@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const VisitListScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { uid } = route.params;
+  const { beneficiary } = route.params;
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,22 +16,19 @@ const VisitListScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://100.72.59.2:3080/api/v1/visit/find/${uid}`);
+        const response = await axios.get(`http://100.72.59.2:3080/api/v1/visit/find/XWcKwN9oTfScr99ABtj0aaQH4Yd2`);
         if (response && response.data && response.data.data) {
-          const today = new Date().toISOString().split('T')[0];
-          const filteredData = response.data.data.filter(item => {
-            const itemDate = new Date(item.date).toISOString().split('T')[0];
-            return itemDate === today;
-          });
-          setData(filteredData);
-          await AsyncStorage.setItem('visitData', JSON.stringify(filteredData)); // Cache the data
+          await AsyncStorage.setItem('visitData', JSON.stringify(response.data.data)); // Cache the data
+          setData(response.data.data);
         } else {
           throw new Error('Invalid response structure');
         }
       } catch (error) {
         setError(error);
+        console.error('Fetch Error:', error); // Log the error
         const cachedData = await AsyncStorage.getItem('visitData');
         if (cachedData) {
+          console.log('Using Cached Data'); // Log when using cached data
           setData(JSON.parse(cachedData));
         } else {
           console.error('No cached data available');
@@ -42,7 +39,7 @@ const VisitListScreen = () => {
     };
 
     fetchData();
-  }, [uid]);
+  }, []);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -56,26 +53,33 @@ const VisitListScreen = () => {
     );
   }
 
-  const handlePress = (beneficiaryId) => {
-    navigation.navigate('GoatDetails', { benefId: beneficiaryId });
+  const handlePress = (beneficiary) => {
+    navigation.navigate('GoatDetails', { beneficiary: beneficiary });
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Visit List:</Text>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handlePress(item.beneficiaryId)} style={styles.itemContainer}>
-            <Text style={styles.itemTitle}>Paravat ID: {item.paravatId}</Text>
-            <Text style={styles.itemDescription}>Beneficiary ID: {item.beneficiaryId}</Text>
-            <Text style={styles.itemDescription}>Status: {item.status}</Text>
-            <Text style={styles.itemDescription}>Date: {new Date(item.date).toLocaleDateString()}</Text>
-            <Text style={styles.itemDescription}>Comments: {item.comments}</Text>
-          </TouchableOpacity>
-        )}
-      />
+      {data.length === 0 ? (
+        <Text style={styles.errorText}>No visits available.</Text>
+      ) : (
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            // console.log(item),
+            console.log(data),
+            <TouchableOpacity onPress={() => handlePress(data[0].beneficiary)} style={styles.itemContainer}>
+              <Text style={styles.itemDescription}>Beneficiary ID: {data[0].beneficiaryId}</Text>
+              <Text style={styles.itemDescription}>Beneficiary Name: {data[0].beneficiary.name}</Text>
+              <Text style={styles.itemDescription}>Beneficiary Address: {data[0].beneficiary.address}</Text>
+              <Text style={styles.itemDescription}>Status: {data[0].status}</Text>
+              <Text style={styles.itemDescription}>Date: {new Date(data[0].date).toLocaleDateString()}</Text>
+              <Text style={styles.itemDescription}>Comments: {data[0].comments}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
 };

@@ -56,7 +56,7 @@ exports.updateVisitStatus = async (req, res) => {
     });
 
     if (!visit) {
-      return res.status(404).json({
+      return res.status(405).json({
         success: false,
         message: `Visit with ID ${paravatId} not found`,
       });
@@ -115,9 +115,9 @@ exports.getVisitsByParavatId = async (req, res) => {
 
 // New update controller
 exports.updateVisit = async (req, res) => {
-  const { paravatId, beneficiaryId, date } = req.body;
-
-  if (!paravatId || !beneficiaryId || !date) {
+  const { paravatId, beneficiaryId } = req.body;
+console.log(req.body)
+  if (!paravatId || !beneficiaryId) {
     return res
       .status(400)
       .json({
@@ -127,13 +127,13 @@ exports.updateVisit = async (req, res) => {
   }
 
   try {
-    const visit = await Visit.findOne({ paravatId, beneficiaryId, date });
+    const visit = await Visit.findOne({ paravatId, beneficiaryId });
 
-    if (!visit) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Visit not found." });
-    }
+    // if (!visit) {
+    //   return res
+    //     .status(404)
+    //     .json({ success: false, message: "Visit not found." });
+    // }
 
     const updatableFields = [
       "status",
@@ -155,6 +155,7 @@ exports.updateVisit = async (req, res) => {
     const updatedVisit = await visit.save();
     res.json({ success: true, data: updatedVisit });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: error.message });
   }
 };

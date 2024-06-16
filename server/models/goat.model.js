@@ -22,7 +22,7 @@ const GoatSchema = new Schema(
     year_of_birth: { type: Number }, // Calculated based on date of birth (dob) field
     isPregnant: { type: Boolean },
     soldFor: { type: Number },
-    tagId: { type: String },
+    tagId: { type: String, default: "!@#ABC" },
   },
   { timestamps: true }
 ); // Adds createdAt and updatedAt fields automatically

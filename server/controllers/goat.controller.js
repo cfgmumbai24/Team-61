@@ -13,6 +13,7 @@ const addGoats = async (req, res) => {
       year_of_birth,
       isPregnant,
       date,
+      tagId,
     } = req.body;
 
     // Create a new goat object
@@ -31,6 +32,7 @@ const addGoats = async (req, res) => {
       breed,
       year_of_birth,
       isPregnant,
+      tagId,
     });
     // Save the new goat object to the database
     const savedGoat = await newGoat.save();

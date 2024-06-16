@@ -68,7 +68,11 @@ const StatBox = () => {
         }));
     };
     const handleChange2 = (event) => {
-        setSelectedBeneficiaryId(event.target.value);
+        const { name, value } = event.target;
+        setFormData(prevState => ({
+            ...prevState,
+            beneficiaryId: value,
+        }));
     };
 
     const [success, setSuccess] = useState(false);
@@ -109,7 +113,7 @@ const StatBox = () => {
         }
     };
 
-
+    console.log(formData)
     const [todaysVisits, setTodaysVisits] = useState([]);
 
     useEffect(() => {
@@ -168,14 +172,14 @@ const StatBox = () => {
                                 <Select
                                     labelId="beneficiary-select-label"
                                     id="beneficiaryId"
-                                    value={selectedBeneficiaryId}
+                                    value={beneficiaries[formData.beneficiaryId]}
                                     onChange={handleChange2}
                                     label="Beneficiary ID"
                                     required
                                 >
-                                    {mockData.map((beneficiary) => (
-                                        <MenuItem key={beneficiary.id} value={beneficiary.id}>
-                                            {beneficiary.name}
+                                    {Object.entries(beneficiaries).map(([id, name]) => (
+                                        <MenuItem key={id} value={id}>
+                                        {name}
                                         </MenuItem>
                                     ))}
                                 </Select>

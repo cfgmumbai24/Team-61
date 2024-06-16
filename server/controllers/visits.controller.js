@@ -1,7 +1,7 @@
 const express = require("express");
 const Visit = require("../models/visits.model");
 const Baneficial = require("../models/benef.model");
-
+const Goat = require("../models/goat.model");
 require("dotenv").config({ path: "../.env" });
 require("dotenv").config();
 
@@ -115,24 +115,25 @@ exports.getVisitsByParavatId = async (req, res) => {
 
 // New update controller
 exports.updateVisit = async (req, res) => {
-  const { paravatId, beneficiaryId, date } = req.body;
+  const { paravatId, beneficiaryId, date, tagId } = req.body;
 
   if (!paravatId || !beneficiaryId || !date) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "paravatId, beneficiaryId, and date are required.",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "paravatId, beneficiaryId, and date are required.",
+    });
   }
 
   try {
     const visit = await Visit.findOne({ paravatId, beneficiaryId, date });
-
+    const goat = await Goat.findOne({ tagId });
     if (!visit) {
       return res
         .status(404)
         .json({ success: false, message: "Visit not found." });
+    }
+    if (!goat) {
+      return res.json({ success: false, msg: "goat not found" });
     }
 
     const updatableFields = [
@@ -153,7 +154,22 @@ exports.updateVisit = async (req, res) => {
     });
 
     const updatedVisit = await visit.save();
-    res.json({ success: true, data: updatedVisit });
+    const updateGoatparams = [
+      "isAlive",
+      "CurrentWeight",
+      "soldFor",
+      "isPregnant",
+    ];
+    updateGoatparams.forEach((field) => {
+      if (field in req.body) {
+        goat[field] = req.body[field];
+      }
+    });
+const currentWeight=req.body.CurrentWeight
+goat.weightArray.push({ weight: currentWeight, date: new Date() });
+
+    const updatedGoat = await goat.save();
+    res.json({ success: true, data: updatedVisit, goatjson: updatedGoat });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

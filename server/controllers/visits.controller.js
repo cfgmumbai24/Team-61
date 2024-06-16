@@ -1,7 +1,7 @@
 const express = require("express");
 const Visit = require("../models/visits.model");
 const Baneficial = require("../models/benef.model");
-
+const Goat = require("../models/goat.model");
 require("dotenv").config({ path: "../.env" });
 require("dotenv").config();
 
@@ -153,7 +153,22 @@ console.log(req.body)
     });
 
     const updatedVisit = await visit.save();
-    res.json({ success: true, data: updatedVisit });
+    const updateGoatparams = [
+      "isAlive",
+      "CurrentWeight",
+      "soldFor",
+      "isPregnant",
+    ];
+    updateGoatparams.forEach((field) => {
+      if (field in req.body) {
+        goat[field] = req.body[field];
+      }
+    });
+const currentWeight=req.body.CurrentWeight
+goat.weightArray.push({ weight: currentWeight, date: new Date() });
+
+    const updatedGoat = await goat.save();
+    res.json({ success: true, data: updatedVisit, goatjson: updatedGoat });
   } catch (error) {
     console.log(error)
     res.status(500).json({ success: false, message: error.message });

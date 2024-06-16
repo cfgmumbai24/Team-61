@@ -47,7 +47,14 @@ const StatBox = () => {
     };
 
     const [success, setSuccess] = useState(false);
-
+    async function incrementAssignments(userId) {
+        try {
+          const response = await axios.patch(`http://localhost:3080/api/v1/paravat/${userId}/incrementAssignments`);
+          console.log('Assignment incremented successfully:', response.data);
+        } catch (error) {
+          console.error('Error incrementing assignment:', error.response?.data || error.message);
+        }
+      }
     const handleSubmit = async (event) => {
         event.preventDefault();
         const startDate = new Date(formData.startDate);
@@ -64,6 +71,7 @@ const StatBox = () => {
                     date: formattedDate, // Use the formatted date
                 });
                 console.log(response.data);
+                incrementAssignments(id);
                 setSuccess(true); // Set success to true
             } catch (error) {
                 console.error('Error submitting form:', error);

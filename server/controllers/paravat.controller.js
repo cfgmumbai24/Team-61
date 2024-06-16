@@ -43,3 +43,45 @@ exports.findParavat = async (req, res) => {
     });
   }
 };
+
+// Endpoint to increment no_of_assignments
+exports.incrementAssignments = async (req, res) => {
+  const { userId } = req.params; // Assuming userId is passed as a URL parameter
+
+  try {
+    const updatedParavat = await Paravat.findOneAndUpdate(
+      { userId: userId },
+      { $inc: { no_of_assignments: 1 } }, // Increment no_of_assignments by 1
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedParavat) {
+      return res.status(404).json({ message: "Paravat not found" });
+    }
+
+    res.status(200).json(updatedParavat);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating Paravat", error: error });
+  }
+};
+
+// Endpoint to increment no_of_completed_assignments
+exports.incrementCompletedAssignments = async (req, res) => {
+  const { userId } = req.params; // Assuming userId is passed as a URL parameter
+
+  try {
+    const updatedParavat = await Paravat.findOneAndUpdate(
+      { userId: userId },
+      { $inc: { no_of_completed_assignments: 1 } }, // Increment no_of_completed_assignments by 1
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedParavat) {
+      return res.status(404).json({ message: "Paravat not found" });
+    }
+
+    res.status(200).json(updatedParavat);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating Paravat", error: error });
+  }
+};

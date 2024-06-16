@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, FormControl, useTheme, InputLabel, Select, MenuItem, FormHelperText, Box } from '@mui/material';
 import Header from './Header';
 import { tokens } from "../theme";
@@ -12,9 +12,30 @@ const GoatForm = () => {
     year_of_birth: '',
     beneficiary_id: '',
   });
+  const [beneficiaries, setBeneficiaries] = useState({}); // State to store the beneficiaries
+
+  useEffect(() => {
+    const fetchBeneficiaries = async () => {
+      try {
+        const response = await axios.get('http://localhost:3080/api/v1/banef/all');
+        var dictBnF = {};
+        const beneficiaryData = response.data.msg.forEach((beneficiary) => {
+          dictBnF[beneficiary._id] = beneficiary.name;
+        
+        });
+        setBeneficiaries(dictBnF);
+      } catch (error) {
+        console.error(error); // Handle the error according to your needs
+      }
+    };
+
+    fetchBeneficiaries();
+  }, []);
+
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { beneficiary_id, ...data } = formData; // Exclude beneficiary_id from the data object
@@ -64,14 +85,13 @@ const GoatForm = () => {
           value={formData.gender}
           label="Gender"
           onChange={handleChange}
-          
         >
           <MenuItem value={'Male'}>Male</MenuItem>
           <MenuItem value={'Female'}>Female</MenuItem>
         </Select>
         <FormHelperText>Required</FormHelperText>
       </FormControl>
-        <TextField
+      <TextField
         required
         id="year_of_birth"
         name="year_of_birth"
@@ -88,7 +108,14 @@ const GoatForm = () => {
         value={formData.beneficiary_id}
         onChange={handleChange}
         sx={{ width: '100%!important' }}
-      />
+        select
+      >
+        {Object.entries(beneficiaries).map(([id, name]) => (
+          <MenuItem key={id} value={id}>
+            {name}
+          </MenuItem>
+        ))}
+      </TextField>
       <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: colors.greenAccent[300], color:colors.blueAccent[700]}}>
         Submit
       </Button>

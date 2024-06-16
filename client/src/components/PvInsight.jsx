@@ -13,7 +13,7 @@ const StatBox = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [curr, setCurr] = useState();
-    const {id} = useParams();
+    const { id } = useParams();
     const [formData, setFormData] = useState({
         beneficiaryId: '',
         startDate: '',
@@ -47,16 +47,16 @@ const StatBox = () => {
             try {
                 const response = await axios.get('http://localhost:3080/api/v1/paravat/find');
                 const data = response.data;
-                data.mdg.map((item)=>{
-                        if(item.userId === id){
-                            setCurr(item);
-                        }
+                data.mdg.map((item) => {
+                    if (item.userId === id) {
+                        setCurr(item);
+                    }
                 });
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-    
+
         fetchData();
     }, []);
 
@@ -85,7 +85,7 @@ const StatBox = () => {
         const startDate = new Date(formData.startDate);
         const endDate = new Date(formData.endDate);
         let currentDate = new Date(startDate);
-    
+
         while (currentDate <= endDate) {
             try {
                 const formattedDate = currentDate.toISOString().split('T')[0]; // Format the date to YYYY-MM-DD
@@ -103,7 +103,7 @@ const StatBox = () => {
                 // Handle error here, e.g., showing an error message
                 break; // Exit the loop on error
             }
-    
+
             // Calculate the next date based on the recurrence period
             currentDate.setDate(currentDate.getDate() + parseInt(formData.recurrencePeriod));
         }
@@ -132,6 +132,26 @@ const StatBox = () => {
         };
 
         fetchVisits();
+    }, []);
+    const [beneficiaries, setBeneficiaries] = useState({}); // State to store the beneficiaries
+
+    useEffect(() => {
+        const fetchBeneficiaries = async () => {
+            try {
+                const response = await axios.get('http://localhost:3080/api/v1/banef/all');
+                var dictBnF = {};
+                const beneficiaryData = response.data.msg.forEach((beneficiary) => {
+                    dictBnF[beneficiary._id] = beneficiary.name;
+
+                });
+                console.log(dictBnF);
+                setBeneficiaries(dictBnF);
+            } catch (error) {
+                console.error(error); // Handle the error according to your needs
+            }
+        };
+
+        fetchBeneficiaries();
     }, []);
 
     return (
@@ -167,7 +187,7 @@ const StatBox = () => {
                                 <MenuItem value={5}>5 days</MenuItem>
                                 <MenuItem value={7}>7 days</MenuItem>
                             </TextField>
-                            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: colors.greenAccent[300], color:colors.blueAccent[700], width:'50%', alignSelf:'center'}}>
+                            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: colors.greenAccent[300], color: colors.blueAccent[700], width: '50%', alignSelf: 'center' }}>
                                 Submit
                             </Button>
                         </form>

@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme, TextField, MenuItem, Button, Alert } from "@mui/material";
+import { Box, Typography, useTheme, TextField, MenuItem, Button, Alert, FormControl, Select, InputLabel } from "@mui/material";
 import { tokens } from "../theme";
 import Header from "./Header";
 import "../styles/pvinsight.css";
@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 
 
 const StatBox = () => {
+    const [selectedBeneficiaryId, setSelectedBeneficiaryId] = useState('Placeholder');
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [curr, setCurr] = useState();
@@ -19,7 +20,28 @@ const StatBox = () => {
         endDate: '',
         recurrencePeriod: '',
     });
-
+    const [mockData, setMockData] = useState([]);   
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get("http://localhost:3080/api/v1/banef/all");
+            const data = response.data;
+    
+            const arr = data.msg.map((item) => ({
+              address:item.address,
+              id:item._id,
+              name: item.name,
+              noofgoats:item.Goats.length,
+              latitude: item.latitude,
+              longitude:item.longitude
+            }));
+            setMockData(arr);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+        fetchData();
+    },[])
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -44,6 +66,9 @@ const StatBox = () => {
             ...prevState,
             [name]: value,
         }));
+    };
+    const handleChange2 = (event) => {
+        setSelectedBeneficiaryId(event.target.value);
     };
 
     const [success, setSuccess] = useState(false);
@@ -118,7 +143,23 @@ const StatBox = () => {
                         <h2>Assign a Beneficiary</h2>
                         {success && <Alert severity="success">Data inserted successfully!</Alert>} {/* Add the Alert component */}
                         <form className="assignform" onSubmit={handleSubmit}>
-                            <TextField name="beneficiaryId" label="Beneficiary ID" variant="outlined" onChange={handleChange} required/>
+                        <FormControl variant="outlined" fullWidth>
+                                <InputLabel id="beneficiary-select-label">Beneficiary ID</InputLabel>
+                                <Select
+                                    labelId="beneficiary-select-label"
+                                    id="beneficiaryId"
+                                    value={selectedBeneficiaryId}
+                                    onChange={handleChange2}
+                                    label="Beneficiary ID"
+                                    required
+                                >
+                                    {mockData.map((beneficiary) => (
+                                        <MenuItem key={beneficiary.id} value={beneficiary.id}>
+                                            {beneficiary.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                             <TextField name="startDate" label="Start Date" type="date" variant="outlined"  InputLabelProps={{ shrink: true }} onChange={handleChange} required/>
                             <TextField name="endDate" label="End Date" type="date" variant="outlined"  InputLabelProps={{ shrink: true }} onChange={handleChange} required />
                             <TextField name="recurrencePeriod" label="Recurrence Period" select variant="outlined" onChange={handleChange} required>
@@ -140,7 +181,7 @@ const StatBox = () => {
                 <div className="right">
                     <h2>Todays Schedule</h2>
                     {todaysVisits.map((visit, index) => (
-                        <div key={index} className="visit">
+                        <div key={index} className="visit" style={{marginTop:"10px"}}>
                             <h3>Beneficiary ID: {visit.beneficiaryId}</h3>
                             <p>Status: {visit.status}</p>
                         </div>

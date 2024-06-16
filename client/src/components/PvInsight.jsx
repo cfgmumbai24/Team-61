@@ -142,7 +142,7 @@ const StatBox = () => {
     useEffect(() => {
         const fetchBeneficiaries = async () => {
             try {
-                const response = await axios.get('http://localhost:3080/api/v1/banef/all');
+                const response = await axios.get('http://localhost:3080/api/v1/visit/find');
                 var dictBnF = {};
                 const beneficiaryData = response.data.msg.forEach((beneficiary) => {
                     dictBnF[beneficiary._id] = beneficiary.name;

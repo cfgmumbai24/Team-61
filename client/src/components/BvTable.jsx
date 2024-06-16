@@ -76,7 +76,7 @@ const BvTable = () => {
 
   return (
     <Box sx={{ width: "100%!important" }}>
-      <Header title="Beneficiers" subtitle="Beneficier's Info" />
+      <Header title="Beneficiaries" />
       <Box
         m="40px 0 0 0"
         height="75vh"
